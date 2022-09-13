@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'io.spring.dependency-management' version "1.0.11.RELEASE"
+    id 'org.springframework.boot' version '2.6.2'
+    id "org.openapi.generator" version "6.0.1"
+}
+
+group 'hr.mmaracic.ruleinterface'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    //openAPI
+    implementation "org.springdoc:springdoc-openapi-ui:${springdocVersion}"
+    implementation "org.openapitools:jackson-databind-nullable:${nullableVersion}"
+
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+openApiGenerate {
+    generatorName = "spring"
+    verbose = false
+    validateSpec = true
+    outputDir = "$rootDir"
+    inputSpec = "$rootDir/openapi/Rules.yaml"
+    skipOverwrite = false
+    apiPackage = "hr.mmaracic.rulein.api"
+    modelPackage = "hr.mmaracic.rulein.model.domain"
+    configOptions = [
+            delegatePattern: "true",
+            dateLibrary: "java8",
+            serializationLibrary: "jackson",
+            configPackage: "hr.mmaracic.rulein.configuration",
+            basePackage: "hr.mmaracic.rulein"
+    ]
+}
+
+compileJava.dependsOn tasks.openApiGenerate
