@@ -72,20 +72,15 @@ components:
       - '!='
 
     Attribute:
-      description: Enum of route attributes that can participate in rule expressions
-      type: string
-      enum:
-        - POL
-        - POD
-        - VIA1
-        - VIA2
-        - VIA3
-        - VIA4
-        - VIA5
-        - VIA6
-        - VIA7
-        - VIA8
-        - VIA9
+      description: Simple attribute
+      type: object
+      properties:
+        path:
+          description: json path to a simple attribute
+          type: string
+        valueType:
+          description: Value type of the value used to narrow the set of allowed values
+          $ref: '#/components/schemas/ValueType'
 
     ValueType:
       description: Object that describes attribute value type - primitive or configurable object types
@@ -94,9 +89,8 @@ components:
         - Integer
         - Double
         - String
-        - Port
-        - Channel
-        - Cabotage
+        - Timestamp
+        - List
 
     Condition:
       description: Condition on attribute - consists of comparison operator, value type and value
@@ -105,12 +99,12 @@ components:
         comparisonOperator:
           description: Comparison operator that needs to be selected from the ones available in the enum
           $ref: '#/components/schemas/ComparisonOperator'
-        valueType:
-          description: Value type of the value used to narrow the set of allowed values
-          $ref: '#/components/schemas/ValueType'
         value:
           description: Value that is compared to the current attribute value
           type: string
+        attribute:
+          description: Expression attribute
+          $ref: '#/components/schemas/Attribute'
       required:
         - comparisonOperator
         - valueType
