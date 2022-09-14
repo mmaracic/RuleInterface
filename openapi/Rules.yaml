@@ -70,6 +70,7 @@ components:
       - '<'
       - '<='
       - '!='
+      - in
 
     Attribute:
       description: Simple attribute
@@ -81,6 +82,9 @@ components:
         valueType:
           description: Value type of the value used to narrow the set of allowed values
           $ref: '#/components/schemas/ValueType'
+      required:
+        - path
+        - valueType
 
     ValueType:
       description: Object that describes attribute value type - primitive or configurable object types
@@ -102,13 +106,17 @@ components:
         value:
           description: Value that is compared to the current attribute value
           type: string
+        arrayValue:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 10
         attribute:
           description: Expression attribute
           $ref: '#/components/schemas/Attribute'
       required:
         - comparisonOperator
-        - valueType
-        - value
 
     Expression:
       description: Simple expression applies a condition to an attribute with a possible unary negative included
